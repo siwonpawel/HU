@@ -9,7 +9,7 @@ import (
 //go:embed html static
 var efs embed.FS
 
-func GetFS(embeded bool) fs.FS {
+func getFS(embeded bool) fs.FS {
 	if embeded {
 		return efs
 	} else {

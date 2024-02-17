@@ -8,23 +8,14 @@ import (
 )
 
 func main() {
-	files := ui.GetFS(false)
-
-	templates, err := ui.NewTemplateRepository(files)
+	templateRepository, err := ui.NewTemplateRepository()
 	if err != nil {
 		log.Panic(err)
 	}
 
-	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		template, err := templates.GetTemplate("index.gohtml")
-		if err != nil {
-			log.Panic(err)
-		}
-
-		template.Execute(w, nil)
-	})
-
-	if err := http.ListenAndServe("localhost:8080", nil); err != nil {
-		log.Panic(err)
+	app := &application{
+		templateRepository: templateRepository,
 	}
+
+	http.ListenAndServe("localhost:8080", app)
 }
