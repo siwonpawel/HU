@@ -10,8 +10,8 @@ type TemplateRepository interface {
 	GetTemplate(name string) (*template.Template, error)
 }
 
-func NewCachedTemplateRepository(files fs.FS) (TemplateRepository, error) {
-	templates, err := loadTemplates(files)
+func NewCachedTemplateRepository() (TemplateRepository, error) {
+	templates, err := loadTemplates(getFS(true))
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,8 @@ func (tr *cachedTemplateRepository) GetTemplate(name string) (*template.Template
 	return tmpl, nil
 }
 
-func NewTemplateRepository(files fs.FS) (TemplateRepository, error) {
+func NewTemplateRepository() (TemplateRepository, error) {
+	files := getFS(false)
 	_, err := loadTemplates(files)
 	if err != nil {
 		return nil, err
